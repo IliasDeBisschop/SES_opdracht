@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 public class CheckNeighboursInGrid {
-    public static Iterable<Integer> getSameNeighboursIds(Iterable<Integer> grid,int width, int height, int indexToCheck) {
-        List<Integer> result = new ArrayList<>();
+    public static ArrayList<Integer> getSameNeighboursIds(Iterable<Integer> grid,int width, int height, int indexToCheck) {
+        ArrayList<Integer> result = new ArrayList<>();
         List<Integer> gridArray = new ArrayList<>();
         grid.forEach(gridArray::add);
 
