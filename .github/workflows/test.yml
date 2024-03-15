@@ -24,4 +24,4 @@ jobs:
 
 
     - name: test with Gradle Wrapper
-      run: ./gradlew test
+      run: ./candycrush/gradlew test
