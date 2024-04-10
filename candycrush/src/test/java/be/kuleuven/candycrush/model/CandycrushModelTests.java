@@ -135,6 +135,6 @@ public class CandycrushModelTests {
         model.candyWithIndexSelected(5);
         assert(model.getScore() ==9);
     }
-    //TODO: Delete previous test and test your own code
+    
 
 }
