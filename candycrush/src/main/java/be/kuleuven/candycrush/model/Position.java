@@ -10,20 +10,21 @@ public record Position(int rowNr, int columNr, BoardSize boardSize) {
         if (columNr < 0) throw new IllegalArgumentException("colum mag niet negatief zijn");
         if (columNr >= boardSize.colum()) throw new IllegalArgumentException("colum mag niet buiten het bord vallen");
     }
-    int toIndex(){
-      return boardSize.colum()*rowNr+columNr;
+    public int toIndex(){
+      return boardSize.row()*columNr+rowNr;
     }
-    static Position fromIndex(int index, BoardSize size){
-        if(index >= size.row()* size.colum()) throw new IllegalArgumentException();
-        int row = index % size.row();
-        int colum =  index / size.row();
-        return new Position(row, colum, size);
+
+    static public Position fromIndex(int index, BoardSize boardSize){
+        if(index >= boardSize.row()* boardSize.colum()) throw new IllegalArgumentException();
+        int row = index % boardSize.row();
+        int colum =  index / boardSize.row();
+        return new Position(row, colum, boardSize);
     }
-    Iterable<Position> neighborPositions() {
+    public Iterable<Position> neighborPositions() {
         return StreamSupport.stream(boardSize.positions().spliterator(), true)
-                .filter(a -> !((a.columNr > this.rowNr + 1 || a.rowNr > this.rowNr + 1)
-                        || (a.columNr < this.rowNr - 1 || a.rowNr < this.rowNr - 1)))
-                .filter(a -> !((a.rowNr == this.rowNr && a.columNr == this.columNr)))
+                .filter(position -> !((position.columNr > this.columNr + 1 || position.rowNr > this.rowNr + 1)
+                        || (position.columNr < this.columNr - 1 || position.rowNr < this.rowNr - 1)))
+                //.filter(a -> !((a.rowNr == this.rowNr && a.columNr == this.columNr)))
                 .toList();
     }
 // inisiele neighborPositions voor 8.4
@@ -37,7 +38,7 @@ public record Position(int rowNr, int columNr, BoardSize boardSize) {
 //                .filter(a->!((a.rowNr == this.rowNr && a.columNr == this.columNr)))
 //                .toList();
 
-    boolean isLastColumn(){
+    public boolean isLastColumn(){
         return columNr == boardSize().colum()-1;
     }
 

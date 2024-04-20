@@ -1,18 +1,18 @@
 package be.kuleuven.candycrush.model;
 
 import be.kuleuven.CheckNeighboursInGrid;
+import be.kuleuven.candycrush.candies.*;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.StreamSupport;
 
 
 public class  CandycrushModel {
     private String speler;
-    private ArrayList<Integer> speelbord;
-    private int width;
-    private int height;
+    private ArrayList<Candy> speelbord;
+    private BoardSize boardSize;
     private int score;
 
 
@@ -21,13 +21,10 @@ public class  CandycrushModel {
         this.speler = speler;
         speelbord = new ArrayList<>();
         score = 0;
-        width = 4;
-        height = 4;
+        boardSize = new BoardSize(4,4);
 
-        for (int i = 0; i < width*height; i++){
-            Random random = new Random();
-            int randomGetal = random.nextInt(5) + 1;
-            speelbord.add(randomGetal);
+        for (int i = 0; i < boardSize.colum()* boardSize.row(); i++){
+            speelbord.add(randomCandy());
         }
     }
 
@@ -35,50 +32,25 @@ public class  CandycrushModel {
         return score;
     }
 
-    public static void main(String[] args) {
-        CandycrushModel model = new CandycrushModel("arne");
-        int i = 1;
-        Iterator<Integer> iter = model.getSpeelbord().iterator();
-        while(iter.hasNext()){
-            int candy = iter.next();
-            System.out.print(candy);
-            if(i% model.getWidth()==0){
-                System.out.print("\n");
-                i = 1;
-            }
-            i++;
-        }
-        System.out.print("\n");
-
-    }
     public String getSpeler() {
         return speler;
     }
 
-    public ArrayList<Integer> getSpeelbord() {
+    public ArrayList<Candy> getSpeelbord() {
         return speelbord;
     }
 
-    public int getWidth() {
-        return width;
-    }
+    public BoardSize getBoardSize() { return boardSize; }
 
-    public int getHeight() {
-        return height;
-    }
-
-    public void candyWithIndexSelected(int index){
+    public void candyWithIndexSelected(Position position){
         //TODO: update method so it also changes direct neighbours of same type and updates score
-        if (index != -1){
-            CheckNeighboursInGrid ch= new CheckNeighboursInGrid();
-            ArrayList<Integer> result = new ArrayList<>();
-            result = ch.getSameNeighboursIds(getSpeelbord(), getWidth(),getWidth(), index);
-            result.add(index);
+        if (position.toIndex() != -1){
+            System.out.println(position.toIndex());
+            List<Position> result = StreamSupport.stream(getSameNeighbourPositions(position).spliterator(),true).toList();
+
             if(result.size()>=3) {
-                for(int i=0; i<result.size(); i++) {
-                    Random random = new Random();
-                    int randomGetal = random.nextInt(5) + 1;
-                    speelbord.set(result.get(i), randomGetal);
+                for (Position pos : result) {
+                    speelbord.set(pos.toIndex(), randomCandy());
                 }
                 increaseScore(result.size());
             }
@@ -86,15 +58,29 @@ public class  CandycrushModel {
             System.out.println("model:candyWithIndexSelected:indexWasMinusOne");
         }
     }
-
-    public void setSpeelbord(ArrayList<Integer> speelbord) {
+    public Iterable<Position> getSameNeighbourPositions(Position position){
+        return StreamSupport.stream(position.neighborPositions().spliterator(),true)
+                .filter(position1 -> speelbord.get(position1.toIndex()).equals(speelbord.get(position.toIndex())))
+                .toList();
+         }
+    public void setSpeelbord(ArrayList<Candy> speelbord) {
         this.speelbord = speelbord;
     }
-
-    public int getIndexFromRowColumn(int row, int column) {
-        return column+row*width;
-    }
     public void increaseScore(int add){
+        if (add < 0 ) throw new IllegalArgumentException();
         this.score+=add;
+    }
+
+    public Candy randomCandy(){
+        Random random = new Random();
+        int candy = random.nextInt(8);
+        return switch (candy) {
+            case 4 -> new BaseDestroyerCandy();
+            case 5 -> new ExplosiveSugar();
+            case 6 -> new ExtraSweet();
+            case 7 -> new MoreCandies();
+            default -> new NormalCandy(candy);
+        };
+
     }
 }

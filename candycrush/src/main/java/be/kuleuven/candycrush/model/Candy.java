@@ -2,5 +2,5 @@ package be.kuleuven.candycrush.model;
 
 import be.kuleuven.candycrush.candies.*;
 
-public sealed interface Candy permits NormalCandy, BaseDestroyerCandy, ExplosiveSugar, ExtraSweet, MoreCandies{
+public sealed interface Candy permits NormalCandy, BaseDestroyerCandy, ExplosiveSugar, ExtraSweet, MoreCandies {
 }
