@@ -1,11 +1,7 @@
 package be.kuleuven.candycrush.model;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
+
+import java.util.stream.StreamSupport;
 
 public record Position(int rowNr, int columNr, BoardSize boardSize) {
     public Position{
@@ -23,17 +19,24 @@ public record Position(int rowNr, int columNr, BoardSize boardSize) {
         int colum =  index / size.row();
         return new Position(row, colum, size);
     }
-    Iterable<Position> neighborPositions(){
-        return IntStream.range(0, boardSize.row())
-                .boxed()
-                .flatMap(row ->
-                        IntStream.range(0, boardSize.colum())
-                .mapToObj(column -> new Position(row, column, boardSize)))
-                .filter(a->!((a.columNr > this.rowNr + 1 || a.rowNr > this.rowNr + 1)
-                              ||(a.columNr < this.rowNr - 1 || a.rowNr < this.rowNr - 1)))
-                .filter(a->!((a.rowNr == this.rowNr && a.columNr == this.columNr)))
+    Iterable<Position> neighborPositions() {
+        return StreamSupport.stream(boardSize.positions().spliterator(), true)
+                .filter(a -> !((a.columNr > this.rowNr + 1 || a.rowNr > this.rowNr + 1)
+                        || (a.columNr < this.rowNr - 1 || a.rowNr < this.rowNr - 1)))
+                .filter(a -> !((a.rowNr == this.rowNr && a.columNr == this.columNr)))
                 .toList();
     }
+// inisiele neighborPositions voor 8.4
+//        return IntStream.range(0, boardSize.row())
+//                .boxed()
+//                .flatMap(row ->
+//                        IntStream.range(0, boardSize.colum())
+//                .mapToObj(column -> new Position(row, column, boardSize)))
+//                .filter(a->!((a.columNr > this.rowNr + 1 || a.rowNr > this.rowNr + 1)
+//                              ||(a.columNr < this.rowNr - 1 || a.rowNr < this.rowNr - 1)))
+//                .filter(a->!((a.rowNr == this.rowNr && a.columNr == this.columNr)))
+//                .toList();
+
     boolean isLastColumn(){
         return columNr == boardSize().colum()-1;
     }

@@ -16,9 +16,10 @@ Het doel van Candy Crush is om zoveel mogelijk punten te behalen door het matche
  
 3. Speciale snoepjes: 
 - Het spel kan speciale snoepjes bevatten die extra krachten hebben wanneer ze worden gematcht: 
- <Explosief suiker>: Wanneer je een rij van minstens 3 snoepjes maakt, worden ook alle andere snoepje die aan de rij grenzen verwijderd. 
- <Extra lekker>: Deze snoepjes zijn dubbele punten waard. 
- 
+<Base destroyer Candy>: Wanneer je een rij van minstens 3 snoepjes maakt, wordt ook de volledige	onderste rij verwijderd.  
+<Explosive sugar>: Wanneer je een rij van minstens 3 snoepjes maakt, worden ook alle andere 	snoepje die aan de rij grenzen verwijderd. 
+<Extra sweet>: Deze snoepjes zijn dubbele punten waard. 
+<More candies>: Wanneer je een rij van minstens 3 snoepjes maakt, krijg je 3 extra zetten. 
 4. Puntentelling en einde spel: 
 - Elke snoepje in een verwijderde rij levert evenveel punten op als het aantal snoepjes dat verwijderd worden. 
 - De speler heeft slechts een vast aantal zetten. Wanneer het aantal zetten 0 wordt is het spel gedaan. 

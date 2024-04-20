@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Vector;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -194,5 +195,17 @@ public class CandycrushModelTests {
     public void board4rijenEn4kolommenPosition3_3_oproepenisLastColumn_resultTrue(){
         Position position = new Position(3,3, new BoardSize(4,4));
         assert (position.isLastColumn());
+    }
+
+    @Test
+    public void board3rijenEn3kolommen_oproepenPositions_relultDePositions(){
+        BoardSize boardSize = new BoardSize(3,3);
+        var correct = new ArrayList<Position>();
+        for (int i=0; i<3; i++){
+            for (int j=0; j<3; j++) {
+                correct.add(new Position(i,j,boardSize));
+            }
+        }
+        assert (boardSize.positions().equals(correct));
     }
 }
