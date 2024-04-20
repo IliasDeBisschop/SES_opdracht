@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class CandycrushModelTests {
 
@@ -135,6 +137,62 @@ public class CandycrushModelTests {
         model.candyWithIndexSelected(5);
         assert(model.getScore() ==9);
     }
-    
 
+    @Test
+    public void boad2rijenen4kolommenPosition12_oproepenVanToIndex_Returns6(){
+        Position position = new Position(1,2,new BoardSize(2,4));
+        System.out.println(position.toIndex());
+        assert (position.toIndex() == 6);
+    }
+
+    @Test
+    public void boad5rijenen6kolommenPosition32_oproepenVanToIndex_Returns(){
+        Position position = new Position(3,2,new BoardSize(5,6));
+        System.out.println(position.toIndex());
+        assert (position.toIndex() == 20);
+    }
+
+    @Test
+    public void board2rijenEn4kolommen_oproepenfromIndexMetIndex7_returnPosition13(){
+        BoardSize boardSize = new BoardSize(2,4);
+        Position position = Position.fromIndex(7, boardSize);
+        assert (position.rowNr()==1 && position.columNr() == 3);
+    }
+
+    @Test
+    public void oproepenfromIndexMetIndexOngeldigeIndex_TrowExeption(){
+        assertThrows(IllegalArgumentException.class, ()->Position.fromIndex(30,new BoardSize(1,1)));
+    }
+
+    @Test
+    public void board4rijenEn4kolommen_oproepenNeighborPositions1_1_return012468910(){
+        BoardSize boardSize = new BoardSize(4,4);
+        Position position = new Position(1,1,boardSize);
+        var result = position.neighborPositions();
+        var correct = new ArrayList<Position>();
+        for (int i=0; i<3; i++){
+            for (int j=0; j<3; j++){
+                if(!(i == 1 && j == 1)){
+                    correct.add(new Position(i,j,boardSize));
+                }
+            }
+        }
+        assert(result.equals(correct));
+    }
+    @Test
+    public void board4rijenEn4kolommen_oproepenNeighborPositions0_0_return145(){
+        BoardSize boardSize = new BoardSize(4,4);
+        Position position = new Position(0,0,boardSize);
+        var result = position.neighborPositions();
+        var correct = new ArrayList<Position>();
+        correct.add(new Position(0,1,boardSize));
+        correct.add(new Position(1,0,boardSize));
+        correct.add(new Position(1,1,boardSize));
+        assert (result.equals(correct));
+    }
+    @Test
+    public void board4rijenEn4kolommenPosition3_3_oproepenisLastColumn_resultTrue(){
+        Position position = new Position(3,3, new BoardSize(4,4));
+        assert (position.isLastColumn());
+    }
 }
