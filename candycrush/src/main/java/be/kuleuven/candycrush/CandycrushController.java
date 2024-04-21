@@ -63,7 +63,17 @@ public class CandycrushController {
     public void onCandyClicked(MouseEvent me){
 
         int candyIndex = view.getIndexOfClicked(me);
+        System.out.println(Position.fromIndex(candyIndex,model.getBoardSize()));
         model.candyWithIndexSelected(Position.fromIndex(candyIndex,model.getBoardSize()));
+        var sting = "";
+        for (int i=0; i<model.getBoardSize().row();i++){
+            for (int j=0;j<model.getBoardSize().colum();j++){
+                Position position = new Position(i,j,model.getBoardSize());
+                sting+=model.getSpeelbord().get(position.toIndex())+ ", ";
+            }
+            sting+="\n";
+        }
+        System.out.println(sting);
         update();
     }
     public void handleStartButtonClicked(MouseEvent e) {

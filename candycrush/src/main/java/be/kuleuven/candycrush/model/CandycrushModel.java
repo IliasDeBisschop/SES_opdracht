@@ -45,7 +45,6 @@ public class  CandycrushModel {
     public void candyWithIndexSelected(Position position){
         //TODO: update method so it also changes direct neighbours of same type and updates score
         if (position.toIndex() != -1){
-            System.out.println(position.toIndex());
             List<Position> result = StreamSupport.stream(getSameNeighbourPositions(position).spliterator(),true).toList();
 
             if(result.size()>=3) {

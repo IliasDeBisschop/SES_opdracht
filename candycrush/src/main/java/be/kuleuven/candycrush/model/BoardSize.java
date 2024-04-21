@@ -10,9 +10,8 @@ public record BoardSize(int row, int colum) {
     public Iterable<Position> positions(){
         return IntStream.range(0, this.row())
                 .boxed()
-                .flatMap(row ->
-                        IntStream.range(0, this.colum())
-                .mapToObj(column -> new Position(row, column, this)))
+                .flatMap(row -> IntStream.range(0, this.colum())
+                        .mapToObj(column -> new Position(row, column, this)))
                 .toList();
 
     }

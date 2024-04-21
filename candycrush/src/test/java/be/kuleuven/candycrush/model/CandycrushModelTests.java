@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Vector;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -134,14 +133,14 @@ public class CandycrushModelTests {
     public void boad2rijenen4kolommenPosition12_oproepenVanToIndex_Returns6(){
         Position position = new Position(1,2,new BoardSize(2,4));
         System.out.println(position.toIndex());
-        assert (position.toIndex() == 5);
+        assert (position.toIndex() == 6);
     }
 
     @Test
     public void boad5rijenen6kolommenPosition32_oproepenVanToIndex_Returns(){
         Position position = new Position(3,2,new BoardSize(5,6));
         System.out.println(position.toIndex());
-        assert (position.toIndex() == 13);
+        assert (position.toIndex() == 20);
     }
 
     @Test
@@ -156,7 +155,7 @@ public class CandycrushModelTests {
         BoardSize boardSize =  new BoardSize(4,4);
         Position position = Position.fromIndex(14,boardSize);
         System.out.println(position);
-        assert (position.equals(new Position(2,3,boardSize)));
+        assert (position.equals(new Position(3,2,boardSize)));
     }
 
     @Test
@@ -209,5 +208,18 @@ public class CandycrushModelTests {
         }
         assert (boardSize.positions().equals(correct));
     }
+    @Test
+    public void board4bij4Pos0_0_islastcolum_false(){
+        Position position = new Position(0,0,new BoardSize(4,4));
+        assert (!position.isLastColumn());
+    }
 
+    @Test
+    public void board4bij4Pos3_0tot3_islastcolum_true(){
+        for (int i=0;i<4;i++){
+            Position position = new Position(3,i,new BoardSize(4,4));
+            System.out.println(position);
+            assert (position.isLastColumn());
+        }
+    }
 }

@@ -11,20 +11,19 @@ public record Position(int rowNr, int columNr, BoardSize boardSize) {
         if (columNr >= boardSize.colum()) throw new IllegalArgumentException("colum mag niet buiten het bord vallen");
     }
     public int toIndex(){
-      return boardSize.row()*columNr+rowNr;
+      return boardSize.colum()*rowNr+columNr;
     }
 
     static public Position fromIndex(int index, BoardSize boardSize){
         if(index >= boardSize.row()* boardSize.colum()) throw new IllegalArgumentException();
-        int row = index % boardSize.row();
-        int colum =  index / boardSize.row();
+        int row = index / boardSize.colum();
+        int colum =  index % boardSize.colum();
         return new Position(row, colum, boardSize);
     }
     public Iterable<Position> neighborPositions() {
         return StreamSupport.stream(boardSize.positions().spliterator(), true)
-                .filter(position -> !((position.columNr > this.columNr + 1 || position.rowNr > this.rowNr + 1)
-                        || (position.columNr < this.columNr - 1 || position.rowNr < this.rowNr - 1)))
-                //.filter(a -> !((a.rowNr == this.rowNr && a.columNr == this.columNr)))
+                .filter(position -> Math.abs(position.rowNr()-this.rowNr())<=1 &&
+                                    Math.abs(position.columNr-this.columNr)<=1)
                 .toList();
     }
 // inisiele neighborPositions voor 8.4
@@ -39,7 +38,7 @@ public record Position(int rowNr, int columNr, BoardSize boardSize) {
 //                .toList();
 
     public boolean isLastColumn(){
-        return columNr == boardSize().colum()-1;
+        return this.rowNr == boardSize().row() - 1;
     }
 
 }
