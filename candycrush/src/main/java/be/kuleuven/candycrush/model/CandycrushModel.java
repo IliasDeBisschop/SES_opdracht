@@ -11,7 +11,7 @@ import java.util.stream.StreamSupport;
 
 public class  CandycrushModel {
     private String speler;
-    private ArrayList<Candy> speelbord;
+    private Board<Candy> speelbord;
     private BoardSize boardSize;
     private int score;
 
@@ -19,13 +19,10 @@ public class  CandycrushModel {
 
     public CandycrushModel(String speler) {
         this.speler = speler;
-        speelbord = new ArrayList<>();
         score = 0;
         boardSize = new BoardSize(4,4);
-
-        for (int i = 0; i < boardSize.colum()* boardSize.row(); i++){
-            speelbord.add(randomCandy());
-        }
+        speelbord = new Board<>(boardSize, new ArrayList<>());
+        speelbord.fill((position)->randomCandy());
     }
 
     public int getScore() {
@@ -36,7 +33,7 @@ public class  CandycrushModel {
         return speler;
     }
 
-    public ArrayList<Candy> getSpeelbord() {
+    public Board<Candy> getSpeelbord() {
         return speelbord;
     }
 
@@ -49,7 +46,7 @@ public class  CandycrushModel {
 
             if(result.size()>=3) {
                 for (Position pos : result) {
-                    speelbord.set(pos.toIndex(), randomCandy());
+                    speelbord.replaceCellAt(pos, randomCandy());
                 }
                 increaseScore(result.size());
             }
@@ -59,10 +56,10 @@ public class  CandycrushModel {
     }
     public Iterable<Position> getSameNeighbourPositions(Position position){
         return StreamSupport.stream(position.neighborPositions().spliterator(),true)
-                .filter(position1 -> speelbord.get(position1.toIndex()).equals(speelbord.get(position.toIndex())))
+                .filter(position1 -> speelbord.getCellAt(position1).equals(speelbord.getCellAt(position)))
                 .toList();
          }
-    public void setSpeelbord(ArrayList<Candy> speelbord) {
+    public void setSpeelbord(Board<Candy> speelbord) {
         this.speelbord = speelbord;
     }
     public void increaseScore(int add){

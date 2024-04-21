@@ -29,7 +29,7 @@ public class CandycrushView extends Region {
     public void update(){
         getChildren().clear();
         Position position = new Position(0,0,model.getBoardSize());
-        Iterator<Candy> iter = model.getSpeelbord().iterator();
+        Iterator<Candy> iter = model.getSpeelbord().board.iterator();
         while(iter.hasNext()) {
             var candy = iter.next();
             Rectangle rectangle = new Rectangle(position.rowNr() * widthCandy, position.columNr() * heigthCandy, widthCandy,heigthCandy);

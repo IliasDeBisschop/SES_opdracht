@@ -17,7 +17,7 @@ public class CandycrushModelTests {
     public void spelerIlias_aanroepenVanDeConstructor_constructorOK(){
         CandycrushModel model = new CandycrushModel("Ilias");
         assert (model.getSpeler() == "Ilias");
-        assert (model.getSpeelbord().size() == 16);
+        assert (model.getSpeelbord().board.size() == 16);
         assert (model.getBoardSize().row() == 4);
         assert (model.getBoardSize().colum()== 4);
         assert (model.getScore()== 0);
@@ -76,22 +76,22 @@ public class CandycrushModelTests {
     public void NieuwBord_constructorOproepen_Alle16plaatsenHebbenEenCandyZijn() {
         CandycrushModel model = new CandycrushModel("Ilias");
 
-        for (Candy i : model.getSpeelbord()) {
+        for (Candy i : model.getSpeelbord().board) {
             assert (i != null);
         }
     }
     @Test
     public void Spelbord0010110220130111Index0_oproepenVanCandyWithIndexSelected_scoreVeranderNiet(){
         CandycrushModel model = new CandycrushModel("Ilias");
-        int[] candyColor =
-                            {0, 0, 1, 0,
+        var boardsize = new BoardSize(4,4);
+        int[] candyColor = {0, 0, 1, 0,
                             1, 1, 0, 2,
                             2, 0, 1, 3,
                             0, 1, 1, 1};
-        var speelbord = new ArrayList<Candy>();
-        for (int i = 0; i < 16; i++){
-            speelbord.add(new NormalCandy(candyColor[i]));
-        }
+        var speelbord = new Board<Candy>(boardsize,new ArrayList<>());
+
+        speelbord.fill((position -> new NormalCandy(candyColor[position.toIndex()])));
+
         model.setSpeelbord(speelbord);
         model.candyWithIndexSelected(Position.fromIndex(0,model.getBoardSize()));
         assert(model.getScore() ==0);
@@ -99,14 +99,14 @@ public class CandycrushModelTests {
     @Test
     public void Spelbord0010110220130111Index14_oproepenVanCandyWithIndexSelected_scoreVeandertNaar4(){
         CandycrushModel model = new CandycrushModel("Ilias");
+        var boardsize = new BoardSize(4,4);
         int[] candyColor = {0, 0, 1, 0,
-                1, 1, 0, 2,
-                2, 0, 1, 3,
-                0, 1, 1, 1};
-        var speelbord = new ArrayList<Candy>();
-        for (int i = 0; i < 16; i++){
-            speelbord.add(new NormalCandy(candyColor[i]));
-        }
+                            1, 1, 0, 2,
+                            2, 0, 1, 3,
+                            0, 1, 1, 1};
+        var speelbord = new Board<Candy>(boardsize,new ArrayList<>());
+
+        speelbord.fill((position -> new NormalCandy(candyColor[position.toIndex()])));
 
         model.setSpeelbord(speelbord);
         model.candyWithIndexSelected(Position.fromIndex(14, model.getBoardSize()) );
@@ -116,14 +116,15 @@ public class CandycrushModelTests {
     @Test
     public void Spelbord0000000000000000Index5_oproepenVanCandyWithIndexSelected_scoreVeandertNaar9(){
         CandycrushModel model = new CandycrushModel("Ilias");
+        var boardsize = new BoardSize(4,4);
         int[] candyColor = {0, 0, 0, 0,
-                0, 0, 0, 0,
-                0, 0, 0, 0,
-                0, 0, 0, 0};
-        var speelbord = new ArrayList<Candy>();
-        for (int i = 0; i < 16; i++){
-            speelbord.add(new NormalCandy(candyColor[i]));
-        }
+                            0, 0, 0, 0,
+                            0, 0, 0, 0,
+                            0, 0, 0, 0};
+        var speelbord = new Board<Candy>(boardsize,new ArrayList<>());
+
+        speelbord.fill((position -> new NormalCandy(candyColor[position.toIndex()])));
+
         model.setSpeelbord(speelbord);
         model.candyWithIndexSelected(Position.fromIndex(5, model.getBoardSize()));
         assert(model.getScore() ==9);

@@ -69,7 +69,7 @@ public class CandycrushController {
         for (int i=0; i<model.getBoardSize().row();i++){
             for (int j=0;j<model.getBoardSize().colum();j++){
                 Position position = new Position(i,j,model.getBoardSize());
-                sting+=model.getSpeelbord().get(position.toIndex())+ ", ";
+                sting+=model.getSpeelbord().getCellAt(position)+", ";
             }
             sting+="\n";
         }
