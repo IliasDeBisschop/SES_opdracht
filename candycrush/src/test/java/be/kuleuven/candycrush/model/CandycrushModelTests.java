@@ -1,7 +1,7 @@
 package be.kuleuven.candycrush.model;
 
 import be.kuleuven.CheckNeighboursInGrid;
-import be.kuleuven.candycrush.candies.NormalCandy;
+import be.kuleuven.candycrush.candies.*;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -221,5 +221,159 @@ public class CandycrushModelTests {
             System.out.println(position);
             assert (position.isLastColumn());
         }
+    }
+
+    @Test
+    public void niewBoardMakenVanIntegersWaardeGelijkAanIndex_getIndex0_return0(){
+        var boardSize = new BoardSize(1,1);
+        var boardIn = new ArrayList<Integer>();
+        boardIn.add(0);
+
+        var board = new Board<Integer>(boardSize, boardIn);
+        var result = board.getCellAt(Position.fromIndex(0,boardSize));
+
+        assert result.equals(0);
+    }
+
+    @Test
+    public void niewBoardMakenVanIntegersWaardeGelijkAanIndex_getIndex2_return2(){
+        var boardSize = new BoardSize(2,2);
+        var boardIn = new ArrayList<Integer>();
+        boardIn.add(0);
+        boardIn.add(1);
+        boardIn.add(2);
+        boardIn.add(3);
+
+        var board = new Board<Integer>(boardSize, boardIn);
+        var result = board.getCellAt(Position.fromIndex(2,boardSize));
+
+        assert result.equals(2);
+    }
+
+    @Test
+    public void niewBoardMakenVanIntegersWaardeGelijkAanIndex_ReplaceCellAtp0met10_return10(){
+        var boardSize = new BoardSize(1,1);
+        var boardIn = new ArrayList<Integer>();
+        boardIn.add(0);
+
+        var board = new Board<Integer>(boardSize, boardIn);
+        board.replaceCellAt(Position.fromIndex(0,boardSize),10);
+        var result = board.getCellAt(Position.fromIndex(0,boardSize));
+        assert result.equals(10);
+    }
+
+    @Test
+    public void niewBoardMakenVanIntegers_fillAllesOp0(){
+        var boardSize = new BoardSize(2,2);
+        var boardIn = new ArrayList<Integer>();
+        var board = new Board<Integer>(boardSize,boardIn);
+        board.fill((position)->0);
+        var result = new ArrayList<Integer>();
+        for (int i=0;i<4;i++){
+            result.add(0);
+        }
+        assert (board.board.equals(result));
+    }
+
+    @Test
+    public void niewBoardMakenVanIntegers_fillAllesOpHunInex(){
+        var boardSize = new BoardSize(2,2);
+        var boardIn = new ArrayList<Integer>();
+        var board = new Board<Integer>(boardSize,boardIn);
+        board.fill((position)->0);
+        board.fill(Position::toIndex);
+        var result = new ArrayList<Integer>();
+        for (int i=0;i<4;i++){
+            result.add(i);
+        }
+        assert (board.board.equals(result));
+    }
+
+    @Test
+    public void nieuwBoardMakenVanIntersWaardeHunIndex_copyTo(){
+        var boardSize = new BoardSize(2,2);
+        var boardIn = new ArrayList<Integer>();
+        var board = new Board<Integer>(boardSize,boardIn);
+        var otherBoard = new Board<Integer>(boardSize,boardIn);
+        board.fill(Position::toIndex);
+
+        otherBoard = board.copyTo(otherBoard);
+
+        var result = new ArrayList<Integer>();
+        for (int i=0;i<4;i++){
+            result.add(i);
+        }
+        assert (otherBoard.board.equals(result));
+
+    }
+
+    @Test
+    public void niewBoardMakenMetCandy_getIndex0_return0(){
+        var boardSize = new BoardSize(1,1);
+        var boardIn = new ArrayList<Integer>();
+        boardIn.add(0);
+
+        var board = new Board<Integer>(boardSize, boardIn);
+        var result = board.getCellAt(Position.fromIndex(0,boardSize));
+
+        assert result.equals(0);
+    }
+
+    @Test
+    public void niewBoardMakenMetVerschillendeCandy_getIndex2_return2(){
+        var boardSize = new BoardSize(2,2);
+        var boardIn = new ArrayList<Candy>();
+        boardIn.add(new MoreCandies());
+        boardIn.add(new ExtraSweet());
+        boardIn.add(new ExplosiveSugar());
+        boardIn.add(new BaseDestroyerCandy());
+
+        var board = new Board<Candy>(boardSize, boardIn);
+        var result = board.getCellAt(Position.fromIndex(2,boardSize));
+
+        assert result.equals(new ExplosiveSugar());
+    }
+
+    @Test
+    public void niewBoardMakenMetCandy_ReplaceCellAtp0metMoarCany(){
+        var boardSize = new BoardSize(1,1);
+        var boardIn = new ArrayList<Candy>();
+        boardIn.add(new NormalCandy(0));
+
+        var board = new Board<Candy>(boardSize, boardIn);
+        board.replaceCellAt(Position.fromIndex(0,boardSize),new MoreCandies());
+        var result = board.getCellAt(Position.fromIndex(0,boardSize));
+        assert result.equals(new MoreCandies());
+    }
+
+    @Test
+    public void niewBoardMakenMetCandy_fillAllesOp0(){
+        var boardSize = new BoardSize(2,2);
+        var boardIn = new ArrayList<Candy>();
+        var board = new Board<Candy>(boardSize,boardIn);
+        board.fill((position)->new MoreCandies());
+        var result = new ArrayList<Candy>();
+        for (int i=0;i<4;i++){
+            result.add(new MoreCandies());
+        }
+        assert (board.board.equals(result));
+    }
+
+    @Test
+    public void nieuwBoardMakenVanCandy_copyTo(){
+        var boardSize = new BoardSize(2,2);
+        var boardIn = new ArrayList<Candy>();
+        var board = new Board<Candy>(boardSize,boardIn);
+        var otherBoard = new Board<Candy>(boardSize,boardIn);
+        board.fill((position)->new NormalCandy(0));
+
+        otherBoard = board.copyTo(otherBoard);
+
+        var result = new ArrayList<Candy>();
+        for (int i=0;i<4;i++){
+            result.add(new NormalCandy(0));
+        }
+        assert (otherBoard.board.equals(result));
+
     }
 }
