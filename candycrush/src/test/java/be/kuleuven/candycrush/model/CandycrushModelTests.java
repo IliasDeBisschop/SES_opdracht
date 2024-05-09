@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -16,7 +17,7 @@ public class CandycrushModelTests {
     @Test
     public void spelerIlias_aanroepenVanDeConstructor_constructorOK(){
         CandycrushModel model = new CandycrushModel("Ilias");
-        assert (model.getSpeler() == "Ilias");
+        assert (model.getSpeler().equals("Ilias"));
         assert (model.getSpeelbord().board.size() == 16);
         assert (model.getBoardSize().row() == 4);
         assert (model.getBoardSize().colum()== 4);
@@ -76,8 +77,9 @@ public class CandycrushModelTests {
     public void NieuwBord_constructorOproepen_Alle16plaatsenHebbenEenCandyZijn() {
         CandycrushModel model = new CandycrushModel("Ilias");
 
-        for (Candy i : model.getSpeelbord().board) {
+        for (var i : model.getSpeelbord().board.keySet()) {
             assert (i != null);
+            assert (model.getSpeelbord().board.get(i) != null);
         }
     }
     @Test
@@ -88,7 +90,7 @@ public class CandycrushModelTests {
                             1, 1, 0, 2,
                             2, 0, 1, 3,
                             0, 1, 1, 1};
-        var speelbord = new Board<Candy>(boardsize,new ArrayList<>());
+        var speelbord = new Board<Candy>(boardsize,new HashMap<>());
 
         speelbord.fill((position -> new NormalCandy(candyColor[position.toIndex()])));
 
@@ -104,7 +106,7 @@ public class CandycrushModelTests {
                             1, 1, 0, 2,
                             2, 0, 1, 3,
                             0, 1, 1, 1};
-        var speelbord = new Board<Candy>(boardsize,new ArrayList<>());
+        var speelbord = new Board<Candy>(boardsize,new HashMap<>());
 
         speelbord.fill((position -> new NormalCandy(candyColor[position.toIndex()])));
 
@@ -121,7 +123,7 @@ public class CandycrushModelTests {
                             0, 0, 0, 0,
                             0, 0, 0, 0,
                             0, 0, 0, 0};
-        var speelbord = new Board<Candy>(boardsize,new ArrayList<>());
+        var speelbord = new Board<Candy>(boardsize,new HashMap<>());
 
         speelbord.fill((position -> new NormalCandy(candyColor[position.toIndex()])));
 
@@ -227,8 +229,8 @@ public class CandycrushModelTests {
     @Test
     public void niewBoardMakenVanIntegersWaardeGelijkAanIndex_getIndex0_return0(){
         var boardSize = new BoardSize(1,1);
-        var boardIn = new ArrayList<Integer>();
-        boardIn.add(0);
+        var boardIn = new HashMap<Position, Integer>();
+        boardIn.put(new Position(0,0,boardSize),0);
 
         var board = new Board<Integer>(boardSize, boardIn);
         var result = board.getCellAt(Position.fromIndex(0,boardSize));
@@ -239,11 +241,10 @@ public class CandycrushModelTests {
     @Test
     public void niewBoardMakenVanIntegersWaardeGelijkAanIndex_getIndex2_return2(){
         var boardSize = new BoardSize(2,2);
-        var boardIn = new ArrayList<Integer>();
-        boardIn.add(0);
-        boardIn.add(1);
-        boardIn.add(2);
-        boardIn.add(3);
+        var boardIn = new HashMap<Position, Integer>();
+        for(int i=0;i<4;i++){
+            boardIn.put(Position.fromIndex(i,boardSize),i);
+        }
 
         var board = new Board<Integer>(boardSize, boardIn);
         var result = board.getCellAt(Position.fromIndex(2,boardSize));
@@ -254,10 +255,10 @@ public class CandycrushModelTests {
     @Test
     public void niewBoardMakenVanIntegersWaardeGelijkAanIndex_ReplaceCellAtp0met10_return10(){
         var boardSize = new BoardSize(1,1);
-        var boardIn = new ArrayList<Integer>();
-        boardIn.add(0);
+        var boardIn = new HashMap<Position, Integer>();
+        boardIn.put(Position.fromIndex(0,boardSize),0);
 
-        var board = new Board<Integer>(boardSize, boardIn);
+        var board = new Board<>(boardSize, boardIn);
         board.replaceCellAt(Position.fromIndex(0,boardSize),10);
         var result = board.getCellAt(Position.fromIndex(0,boardSize));
         assert result.equals(10);
@@ -266,12 +267,12 @@ public class CandycrushModelTests {
     @Test
     public void niewBoardMakenVanIntegers_fillAllesOp0(){
         var boardSize = new BoardSize(2,2);
-        var boardIn = new ArrayList<Integer>();
-        var board = new Board<Integer>(boardSize,boardIn);
+        var boardIn = new HashMap<Position, Integer>();
+        var board = new Board<>(boardSize,boardIn);
         board.fill((position)->0);
-        var result = new ArrayList<Integer>();
+        var result = new HashMap<Position, Integer>();
         for (int i=0;i<4;i++){
-            result.add(0);
+            result.put(Position.fromIndex(i,boardSize),0);
         }
         assert (board.board.equals(result));
     }
@@ -279,13 +280,14 @@ public class CandycrushModelTests {
     @Test
     public void niewBoardMakenVanIntegers_fillAllesOpHunInex(){
         var boardSize = new BoardSize(2,2);
-        var boardIn = new ArrayList<Integer>();
-        var board = new Board<Integer>(boardSize,boardIn);
+        var boardIn = new HashMap<Position, Integer>();
+        var board = new Board<>(boardSize,boardIn);
         board.fill((position)->0);
         board.fill(Position::toIndex);
-        var result = new ArrayList<Integer>();
+
+        var result = new HashMap<Position,Integer>();
         for (int i=0;i<4;i++){
-            result.add(i);
+            result.put(Position.fromIndex(i,boardSize),i);
         }
         assert (board.board.equals(result));
     }
@@ -293,16 +295,16 @@ public class CandycrushModelTests {
     @Test
     public void nieuwBoardMakenVanIntersWaardeHunIndex_copyTo(){
         var boardSize = new BoardSize(2,2);
-        var boardIn = new ArrayList<Integer>();
+        var boardIn = new HashMap<Position, Integer>();
         var board = new Board<Integer>(boardSize,boardIn);
         var otherBoard = new Board<Integer>(boardSize,boardIn);
         board.fill(Position::toIndex);
 
         otherBoard = board.copyTo(otherBoard);
 
-        var result = new ArrayList<Integer>();
+        var result = new HashMap<Position,Integer>();
         for (int i=0;i<4;i++){
-            result.add(i);
+            result.put(Position.fromIndex(i,boardSize),i);
         }
         assert (otherBoard.board.equals(result));
 
@@ -311,8 +313,8 @@ public class CandycrushModelTests {
     @Test
     public void niewBoardMakenMetCandy_getIndex0_return0(){
         var boardSize = new BoardSize(1,1);
-        var boardIn = new ArrayList<Integer>();
-        boardIn.add(0);
+        var boardIn = new HashMap<Position, Integer>();
+        boardIn.put(Position.fromIndex(0,boardSize),0);
 
         var board = new Board<Integer>(boardSize, boardIn);
         var result = board.getCellAt(Position.fromIndex(0,boardSize));
@@ -323,11 +325,11 @@ public class CandycrushModelTests {
     @Test
     public void niewBoardMakenMetVerschillendeCandy_getIndex2_return2(){
         var boardSize = new BoardSize(2,2);
-        var boardIn = new ArrayList<Candy>();
-        boardIn.add(new MoreCandies());
-        boardIn.add(new ExtraSweet());
-        boardIn.add(new ExplosiveSugar());
-        boardIn.add(new BaseDestroyerCandy());
+        var boardIn = new HashMap<Position,Candy>();
+        boardIn.put(Position.fromIndex(0,boardSize), new MoreCandies());
+        boardIn.put(Position.fromIndex(1,boardSize), new ExtraSweet());
+        boardIn.put(Position.fromIndex(2,boardSize), new ExplosiveSugar());
+        boardIn.put(Position.fromIndex(3,boardSize), new BaseDestroyerCandy());
 
         var board = new Board<Candy>(boardSize, boardIn);
         var result = board.getCellAt(Position.fromIndex(2,boardSize));
@@ -338,8 +340,8 @@ public class CandycrushModelTests {
     @Test
     public void niewBoardMakenMetCandy_ReplaceCellAtp0metMoarCany(){
         var boardSize = new BoardSize(1,1);
-        var boardIn = new ArrayList<Candy>();
-        boardIn.add(new NormalCandy(0));
+        var boardIn = new HashMap<Position, Candy>();
+        boardIn.put(Position.fromIndex(0,boardSize),new NormalCandy(0));
 
         var board = new Board<Candy>(boardSize, boardIn);
         board.replaceCellAt(Position.fromIndex(0,boardSize),new MoreCandies());
@@ -350,12 +352,12 @@ public class CandycrushModelTests {
     @Test
     public void niewBoardMakenMetCandy_fillAllesOp0(){
         var boardSize = new BoardSize(2,2);
-        var boardIn = new ArrayList<Candy>();
-        var board = new Board<Candy>(boardSize,boardIn);
+        var boardIn = new HashMap<Position,Candy>();
+        var board = new Board<>(boardSize,boardIn);
         board.fill((position)->new MoreCandies());
-        var result = new ArrayList<Candy>();
+        var result = new HashMap<>();
         for (int i=0;i<4;i++){
-            result.add(new MoreCandies());
+            result.put(Position.fromIndex(i,boardSize), new MoreCandies());
         }
         assert (board.board.equals(result));
     }
@@ -363,16 +365,16 @@ public class CandycrushModelTests {
     @Test
     public void nieuwBoardMakenVanCandy_copyTo(){
         var boardSize = new BoardSize(2,2);
-        var boardIn = new ArrayList<Candy>();
-        var board = new Board<Candy>(boardSize,boardIn);
-        var otherBoard = new Board<Candy>(boardSize,boardIn);
+        var boardIn = new HashMap<Position, Candy>();
+        var board = new Board<>(boardSize,boardIn);
+        var otherBoard = new Board<>(boardSize,boardIn);
         board.fill((position)->new NormalCandy(0));
 
         otherBoard = board.copyTo(otherBoard);
 
-        var result = new ArrayList<Candy>();
+        var result = new HashMap<Position,Candy>();
         for (int i=0;i<4;i++){
-            result.add(new NormalCandy(0));
+            result.put(Position.fromIndex(i,boardSize),new NormalCandy(0));
         }
         assert (otherBoard.board.equals(result));
 

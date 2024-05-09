@@ -11,6 +11,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 
 import java.util.Iterator;
+import java.util.Map;
 
 import static javafx.scene.paint.Color.*;
 
@@ -29,9 +30,9 @@ public class CandycrushView extends Region {
     public void update(){
         getChildren().clear();
         Position position = new Position(0,0,model.getBoardSize());
-        Iterator<Candy> iter = model.getSpeelbord().board.iterator();
+        Iterator<Map.Entry<Position, Candy>> iter = model.getSpeelbord().board.entrySet().iterator();
         while(iter.hasNext()) {
-            var candy = iter.next();
+            var candy = iter.next().getValue();
             Rectangle rectangle = new Rectangle(position.rowNr() * widthCandy, position.columNr() * heigthCandy, widthCandy,heigthCandy);
             rectangle.setFill(TRANSPARENT);
             rectangle.setStroke(BLACK);
