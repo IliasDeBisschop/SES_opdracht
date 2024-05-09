@@ -1,7 +1,8 @@
 package be.kuleuven.candycrush.model;
 
 
-import java.util.stream.StreamSupport;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 public record Position(int rowNr, int columNr, BoardSize boardSize) {
     public Position{
@@ -21,25 +22,43 @@ public record Position(int rowNr, int columNr, BoardSize boardSize) {
         return new Position(row, colum, boardSize);
     }
     public Iterable<Position> neighborPositions() {
-        return StreamSupport.stream(boardSize.positions().spliterator(), true)
+        return boardSize.positions().stream()
                 .filter(position -> Math.abs(position.rowNr()-this.rowNr())<=1 &&
                                     Math.abs(position.columNr-this.columNr)<=1)
                 .toList();
     }
-// inisiele neighborPositions voor 8.4
-//        return IntStream.range(0, boardSize.row())
-//                .boxed()
-//                .flatMap(row ->
-//                        IntStream.range(0, boardSize.colum())
-//                .mapToObj(column -> new Position(row, column, boardSize)))
-//                .filter(a->!((a.columNr > this.rowNr + 1 || a.rowNr > this.rowNr + 1)
-//                              ||(a.columNr < this.rowNr - 1 || a.rowNr < this.rowNr - 1)))
-//                .filter(a->!((a.rowNr == this.rowNr && a.columNr == this.columNr)))
-//                .toList();
 
     public boolean isLastColumn(){
         return this.rowNr == boardSize().row() - 1;
     }
+
+    public Stream<Position> walkLeft(){
+        return boardSize.positions().stream()
+                .filter(position -> position.rowNr() == this.rowNr())
+                .filter(position -> position.columNr()<= this.columNr())
+                .sorted(Comparator.comparingInt(Position::columNr).reversed());
+
+    }
+    public Stream<Position> walkRight(){
+        return boardSize.positions().stream()
+                .filter(position -> position.rowNr() == this.rowNr())
+                .filter(position -> position.columNr() >= this.columNr())
+                .sorted(Comparator.comparingInt(Position::columNr));
+    }
+    public Stream<Position> walkUp(){
+        return boardSize.positions().stream()
+                .filter(position -> position.columNr() == this.columNr())
+                .filter(position -> position.rowNr() <= this.rowNr())
+                .sorted(Comparator.comparingInt(Position::columNr).reversed());
+    }
+    public Stream<Position> walkDown(){
+        return boardSize.positions().stream()
+                .filter(position -> position.columNr() == this.columNr())
+                .filter(position -> position.rowNr() >= this.rowNr())
+                .sorted(Comparator.comparingInt(Position::columNr));
+    }
+
+
 
 }
 

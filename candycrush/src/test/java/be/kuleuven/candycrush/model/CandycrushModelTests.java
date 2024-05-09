@@ -379,4 +379,6 @@ public class CandycrushModelTests {
         assert (otherBoard.board.equals(result));
 
     }
+
+
 }
