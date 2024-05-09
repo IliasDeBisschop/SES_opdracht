@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
+// start
 public class Board<E> {
     public Map<Position, E> board;
     public Map<E, Position> reverseBoard;
