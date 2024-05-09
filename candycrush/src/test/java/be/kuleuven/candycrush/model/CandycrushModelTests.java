@@ -300,7 +300,7 @@ public class CandycrushModelTests {
         var otherBoard = new Board<Integer>(boardSize,boardIn);
         board.fill(Position::toIndex);
 
-        otherBoard = board.copyTo(otherBoard);
+        board.copyTo(otherBoard);
 
         var result = new HashMap<Position,Integer>();
         for (int i=0;i<4;i++){
@@ -367,10 +367,10 @@ public class CandycrushModelTests {
         var boardSize = new BoardSize(2,2);
         var boardIn = new HashMap<Position, Candy>();
         var board = new Board<>(boardSize,boardIn);
-        var otherBoard = new Board<>(boardSize,boardIn);
+        Board<Candy> otherBoard = new Board<>(boardSize,boardIn);
         board.fill((position)->new NormalCandy(0));
 
-        otherBoard = board.copyTo(otherBoard);
+        board.copyTo(otherBoard);
 
         var result = new HashMap<Position,Candy>();
         for (int i=0;i<4;i++){

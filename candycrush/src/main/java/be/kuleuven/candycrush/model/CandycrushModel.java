@@ -4,6 +4,7 @@ import be.kuleuven.CheckNeighboursInGrid;
 import be.kuleuven.candycrush.candies.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.StreamSupport;
@@ -21,7 +22,7 @@ public class  CandycrushModel {
         this.speler = speler;
         score = 0;
         boardSize = new BoardSize(4,4);
-        speelbord = new Board<>(boardSize, new ArrayList<>());
+        speelbord = new Board<>(boardSize, new HashMap<>());
         speelbord.fill((position)->randomCandy());
     }
 

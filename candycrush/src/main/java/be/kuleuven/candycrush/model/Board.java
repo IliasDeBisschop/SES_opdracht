@@ -1,42 +1,37 @@
 package be.kuleuven.candycrush.model;
 
-import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 
 public class Board<E> {
-    public List<E> board;
+    public Map<Position, E> board;
     public BoardSize boardSize;
 
-    public Board(BoardSize boardSize, List<E>board) {
+    public Board(BoardSize boardSize, Map<Position, E> board) {
         this.board = board;
         this.boardSize = boardSize;
     }
 
     public E getCellAt(Position position){
-        return board.get(position.toIndex());
+        return board.get(position);
     }
 
     public void replaceCellAt(Position position, E newCell){
-        board.set(position.toIndex(), newCell);
+        board.replace(position, newCell);
+
     }
 
-    public <T extends E> void fill(Function<Position, T> cellCreator){
-        if (this.board.isEmpty()){
-            for(int i = 0; i < boardSize.colum() * boardSize.row(); i++ ){
-                board.add(i, cellCreator.apply(Position.fromIndex(i, boardSize)));
-            }
-        }
-        for(int i = 0; i < boardSize.colum() * boardSize.row(); i++ ){
-            board.set(i, cellCreator.apply(Position.fromIndex(i, boardSize)));
+    public <T extends E> void fill(Function<Position, T> cellCreator) {
+        for (Position position : this.boardSize.positions()) {
+            board.put(position, cellCreator.apply(position));
         }
     }
 
-    public Board<? super E> copyTo(Board<? super E> otherBoard){
+    public void copyTo(Board<? super E> otherBoard){
         if(!otherBoard.boardSize.equals(boardSize)) throw new IllegalArgumentException("moet hetzelfde grote board zijn");
-        for(int i = 0; i < boardSize.colum() * boardSize.row(); i++ ){
-            otherBoard.replaceCellAt(Position.fromIndex(i, boardSize), board.get(i));
+        for(var position : boardSize.positions()){
+            otherBoard.replaceCellAt(position, board.get(position));
         }
-        return otherBoard;
     }
 }
 
