@@ -1,5 +1,6 @@
 package be.kuleuven.candycrush.model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -10,6 +11,9 @@ public class BoardMaxScore {
 
     public BoardMaxScore(Board<Candy> speelbord) {
         this.speelbord = speelbord;
+    }
+    public BoardSize getBoardSize() {
+        return speelbord.boardSize;
     }
 
     public boolean firstTwoHaveCandy(Candy candy, Stream<Position> positions){
@@ -51,7 +55,35 @@ public class BoardMaxScore {
     public Board<Candy> getSpeelbord() {
         return speelbord;
     }
-    public BoardSize getBoardSize() {
-        return speelbord.boardSize;
+    public void clearMatch(List<Position> match){
+        if (match.isEmpty()) return;
+
+        var firstCandy = match.getFirst();
+        speelbord.board.remove(firstCandy);
+        var newMatch = match.subList(1, match.size());
+        clearMatch(newMatch);
+    }
+    public void fallDownTo(Position pos){
+        if (pos.rowNr() == 0) return;
+
+        if (!speelbord.board.containsKey(pos)){
+            var listNestPositions = new ArrayList<>(
+                                 pos.walkUp().skip(1)
+                                .toList()
+                            );
+            if (listNestPositions.isEmpty()) return;
+            var nextPosition = listNestPositions.removeFirst();
+            while (speelbord.getCellAt(nextPosition) == null && !listNestPositions.isEmpty()){
+                nextPosition = listNestPositions.removeFirst();
+            }
+
+            if (speelbord.getCellAt(nextPosition) != null){
+                speelbord.replaceCellAt(pos, speelbord.getCellAt(nextPosition));
+                speelbord.board.remove(nextPosition);
+            }
+        }
+
+        var nextPos = new Position(pos.rowNr()-1, pos.columNr(), pos.boardSize());
+        fallDownTo(nextPos);
     }
 }

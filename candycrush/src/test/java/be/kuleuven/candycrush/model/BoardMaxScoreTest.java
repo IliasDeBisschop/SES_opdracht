@@ -309,7 +309,78 @@ public void newModel_longestMatchDown_returnControle(){
         temp.add(new Position(2,2,board.getBoardSize()));
         temp.add(new Position(2,3,board.getBoardSize()));
         controle.add(temp);
+
         var result = board.findAllMatches();
         assert result.equals(controle);
     }
+//    clearMatch
+    @Test
+    public void newModel_clearMatch_returnControle(){
+        CandycrushModel model = createBoardFromString("""
+                o***
+                @#**
+                o*#*
+                **@#""");
+        var board = new BoardMaxScore(model.getSpeelbord());
+        var match = board.longestMatchToRight(new Position(0,1,board.getBoardSize()));
+
+        board.clearMatch(match);
+
+        assert !board.getSpeelbord().board.containsKey(new Position(0,1,board.getBoardSize()));
+        assert !board.getSpeelbord().board.containsKey(new Position(0,2,board.getBoardSize()));
+        assert !board.getSpeelbord().board.containsKey(new Position(0,3,board.getBoardSize()));
+    }
+    @Test
+    public void newModel_clearMatch2_returnControle(){
+        CandycrushModel model = createBoardFromString("""
+                o***
+                @#**
+                o*#*
+                **@#""");
+        var board = new BoardMaxScore(model.getSpeelbord());
+        var match = board.longestMatchDown(new Position(0,3,board.getBoardSize()));
+
+        board.clearMatch(match);
+
+        assert !board.getSpeelbord().board.containsKey(new Position(0,3,board.getBoardSize()));
+        assert !board.getSpeelbord().board.containsKey(new Position(1,3,board.getBoardSize()));
+        assert !board.getSpeelbord().board.containsKey(new Position(1,3,board.getBoardSize()));
+    }
+//    clearMatch
+
+//    fallDownTo
+    @Test
+    public void newModel_fallDownTo_returnControle(){
+        CandycrushModel model = createBoardFromString("""
+                o***
+                @#**
+                o*#*
+                **@#""");
+        var board = new BoardMaxScore(model.getSpeelbord());
+        var match = board.longestMatchDown(new Position(0,3,board.getBoardSize()));
+        board.clearMatch(match);
+        board.fallDownTo(new Position(3,3,board.getBoardSize()));
+
+        assert board.getSpeelbord().getCellAt(new Position(0,3,board.getBoardSize())) == null;
+        assert board.getSpeelbord().getCellAt(new Position(1,3,board.getBoardSize())) == null;
+        assert board.getSpeelbord().getCellAt(new Position(2,3,board.getBoardSize())) == null;
+    }
+    @Test
+    public void newModel_fallDownTo2_returnControle(){
+        CandycrushModel model = createBoardFromString("""
+                o***
+                @#**
+                o*#*
+                **@#""");
+        var board = new BoardMaxScore(model.getSpeelbord());
+        var match = board.longestMatchToRight(new Position(3,0,board.getBoardSize()));
+        board.clearMatch(match);
+        board.fallDownTo(new Position(3,0,board.getBoardSize()));
+        board.fallDownTo(new Position(3,1,board.getBoardSize()));
+
+        assert board.getSpeelbord().getCellAt(new Position(0,0,board.getBoardSize())) == null;
+        assert board.getSpeelbord().getCellAt(new Position(0,1,board.getBoardSize())) == null;
+    }
+//    fallDownTo
+
 }
