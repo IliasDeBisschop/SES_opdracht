@@ -1,7 +1,6 @@
 package be.kuleuven.candycrush.model;
 
 import java.util.Collection;
-import java.util.Objects;
 import java.util.stream.IntStream;
 
 public record BoardSize(int row, int colum) {

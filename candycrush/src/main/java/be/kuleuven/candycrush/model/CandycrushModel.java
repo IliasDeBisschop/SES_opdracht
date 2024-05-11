@@ -119,41 +119,5 @@ public class  CandycrushModel {
         };
 
     }
-    public Set<List<Position>> findAllMatches(){
-        var horizaleM = horizontalStartingPositions().map(this::longestMatchToRight)
-                        .filter(list -> list.size() >= 3);
 
-        var verticaleM = verticalStartingPositions().map(this::longestMatchDown)
-                        .filter(list -> list.size() >= 3);
-
-        return Stream.concat(horizaleM, verticaleM).collect(Collectors.toSet());
-    }
-
-    public boolean firstTwoHaveCandy(Candy candy, Stream<Position> positions){
-        var list = positions.limit(2).filter(pos->speelbord.board.get(pos).equals(candy)).toList();
-        if (list.size() <= 1) return false;
-        else return true;
-    }
-
-
-
-    public Stream<Position> horizontalStartingPositions(){
-        return boardSize.positions().stream().filter(position -> position.columNr() == 0 ||
-                        firstTwoHaveCandy(speelbord.getCellAt(position), position.walkRight()));
-    }
-
-    public Stream<Position> verticalStartingPositions(){
-        return boardSize.positions().stream().filter(position -> position.rowNr() == 0 ||
-                firstTwoHaveCandy(speelbord.getCellAt(position), position.walkDown()));
-    }
-    public List<Position> longestMatchToRight(Position pos){
-        return pos.walkRight()
-                    .takeWhile(position -> speelbord.getCellAt(pos).equals(speelbord.getCellAt(position)))
-                    .toList();
-    }
-    public List<Position> longestMatchDown(Position pos){
-        return pos.walkDown()
-                .takeWhile(position -> speelbord.getCellAt(pos).equals(speelbord.getCellAt(position)))
-                .toList();
-    }
 }
