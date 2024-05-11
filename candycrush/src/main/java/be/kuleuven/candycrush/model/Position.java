@@ -49,13 +49,13 @@ public record Position(int rowNr, int columNr, BoardSize boardSize) {
         return boardSize.positions().stream()
                 .filter(position -> position.columNr() == this.columNr())
                 .filter(position -> position.rowNr() <= this.rowNr())
-                .sorted(Comparator.comparingInt(Position::columNr).reversed());
+                .sorted(Comparator.comparingInt(Position::rowNr).reversed());
     }
     public Stream<Position> walkDown(){
         return boardSize.positions().stream()
                 .filter(position -> position.columNr() == this.columNr())
                 .filter(position -> position.rowNr() >= this.rowNr())
-                .sorted(Comparator.comparingInt(Position::columNr));
+                .sorted(Comparator.comparingInt(Position::rowNr));
     }
 
 
