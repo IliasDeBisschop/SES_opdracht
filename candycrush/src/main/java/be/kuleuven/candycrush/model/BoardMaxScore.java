@@ -18,8 +18,7 @@ public class BoardMaxScore {
 
     public boolean firstTwoHaveCandy(Candy candy, Stream<Position> positions){
         var list = positions.limit(2).filter(pos->speelbord.board.get(pos).equals(candy)).toList();
-        if (list.size() <= 1) return false;
-        else return true;
+        return list.size() > 1;
     }
 
     public Set<List<Position>> findAllMatches(){
