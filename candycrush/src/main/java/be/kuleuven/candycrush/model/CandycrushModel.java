@@ -25,6 +25,46 @@ public class  CandycrushModel {
         speelbord.fill((position)->randomCandy());
     }
 
+    private CandycrushModel(BoardSize size) {
+        this.speler = "speler";
+        score = 0;
+        boardSize = size;
+        speelbord = new Board<>(boardSize, new HashMap<>());
+    }
+
+    public static CandycrushModel createBoardFromString(String configuration) {
+        var lines = configuration.toLowerCase().lines().toList();
+        BoardSize size = new BoardSize(lines.size(), lines.getFirst().length());
+        var model = createNewModel(size); // deze moet je zelf voorzien
+        for (int row = 0; row < lines.size(); row++) {
+            var line = lines.get(row);
+            for (int col = 0; col < line.length(); col++) {
+                model.setCandyAt(new Position(row, col, size), characterToCandy(line.charAt(col)));
+            }
+        }
+        return model;
+    }
+
+    private void setCandyAt(Position position, Candy candy) {
+        speelbord.board.put(position,candy);
+    }
+
+    private static CandycrushModel createNewModel(BoardSize size) {
+        return new CandycrushModel(size);
+    }
+
+    private static Candy characterToCandy(char c) {
+        return switch (c) {
+            case '.' -> null;
+            case 'o' -> new NormalCandy(0);
+            case '*' -> new NormalCandy(1);
+            case '#' -> new NormalCandy(2);
+            case '@' -> new NormalCandy(3);
+            default -> throw new IllegalArgumentException("Unexpected value: " + c);
+        };
+    }
+
+
     public int getScore() {
         return score;
     }
