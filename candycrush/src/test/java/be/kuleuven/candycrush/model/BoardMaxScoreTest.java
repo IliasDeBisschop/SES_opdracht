@@ -446,4 +446,14 @@ public void newModel_longestMatchDown_returnControle(){
         assert board.getSpeelbord().getCellAt(new Position(3,3,board.getBoardSize())) != null;
 
     }
+    @Test
+    public void newModel3_updateBoard_returnControle() {
+        CandycrushModel model = createBoardFromString("""
+                o*@*
+                @#@*
+                o*#@
+                **@#""");
+        var board = new BoardMaxScore(model.getSpeelbord());
+        assert !board.updateBoard();
+        }
 }
