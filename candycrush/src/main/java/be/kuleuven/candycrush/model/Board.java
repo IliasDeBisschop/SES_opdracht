@@ -15,12 +15,7 @@ public class Board<E> {
         this.board = board;
         this.boardSize = boardSize;
     }
-    public Board(Map<E, Position> reverseBoard,BoardSize boardSize) {
-        this.board = reverseBoard.entrySet().stream()
-                .collect(Collectors
-                        .toMap(Map.Entry::getValue, Map.Entry::getKey));
-        this.boardSize = boardSize;
-    }
+
     public E getCellAt(Position position){
         return board.get(position);
     }

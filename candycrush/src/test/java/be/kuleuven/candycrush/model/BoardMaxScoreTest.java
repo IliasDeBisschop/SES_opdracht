@@ -383,4 +383,67 @@ public void newModel_longestMatchDown_returnControle(){
     }
 //    fallDownTo
 
+//    updateBoard
+    @Test
+    public void newModel_updateBoard_returnControle(){
+        CandycrushModel model = createBoardFromString("""
+                o***
+                @#**
+                o*#*
+                **@#""");
+        var board = new BoardMaxScore(model.getSpeelbord());
+        assert board.updateBoard();
+
+        assert board.getSpeelbord().getCellAt(new Position(0,0,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(0,1,board.getBoardSize())) == null;
+        assert board.getSpeelbord().getCellAt(new Position(0,2,board.getBoardSize())) == null;
+        assert board.getSpeelbord().getCellAt(new Position(0,3,board.getBoardSize())) == null;
+
+        assert board.getSpeelbord().getCellAt(new Position(1,0,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(1,1,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(1,2,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(1,3,board.getBoardSize())) == null;
+
+        assert board.getSpeelbord().getCellAt(new Position(2,0,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(2,1,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(2,2,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(2,3,board.getBoardSize())) == null;
+
+        assert board.getSpeelbord().getCellAt(new Position(3,0,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(3,1,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(3,2,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(3,3,board.getBoardSize())) != null;
+
+    }
+    @Test
+    public void newModel2_updateBoard_returnControle() {
+        CandycrushModel model = createBoardFromString("""
+                o*@*
+                @***
+                o*#*
+                **@#""");
+        var board = new BoardMaxScore(model.getSpeelbord());
+        assert board.updateBoard();
+
+        assert board.getSpeelbord().getCellAt(new Position(0,0,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(0,1,board.getBoardSize())) == null;
+        assert board.getSpeelbord().getCellAt(new Position(0,2,board.getBoardSize())) == null;
+        assert board.getSpeelbord().getCellAt(new Position(0,3,board.getBoardSize())) == null;
+
+        assert board.getSpeelbord().getCellAt(new Position(1,0,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(1,1,board.getBoardSize())) == null;
+        assert board.getSpeelbord().getCellAt(new Position(1,2,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(1,3,board.getBoardSize())) == null;
+
+        assert board.getSpeelbord().getCellAt(new Position(2,0,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(2,1,board.getBoardSize())) == null;
+        assert board.getSpeelbord().getCellAt(new Position(2,2,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(2,3,board.getBoardSize())) == null;
+
+        assert board.getSpeelbord().getCellAt(new Position(3,0,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(3,1,board.getBoardSize())) == null;
+        assert board.getSpeelbord().getCellAt(new Position(3,2,board.getBoardSize())) != null;
+        assert board.getSpeelbord().getCellAt(new Position(3,3,board.getBoardSize())) != null;
+
+    }
 }

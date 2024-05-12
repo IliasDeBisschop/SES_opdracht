@@ -15,9 +15,14 @@ public class BoardMaxScore {
     public BoardSize getBoardSize() {
         return speelbord.boardSize;
     }
+    public Board<Candy> getSpeelbord() {
+        return speelbord;
+    }
 
     public boolean firstTwoHaveCandy(Candy candy, Stream<Position> positions){
-        var list = positions.limit(2).filter(pos->speelbord.board.get(pos).equals(candy)).toList();
+        var list = positions.limit(2).filter(pos-> speelbord.getCellAt(pos) != null
+                                                    && speelbord.board.get(pos).equals(candy))
+                .toList();
         return list.size() > 1;
     }
 
@@ -42,18 +47,18 @@ public class BoardMaxScore {
     }
     public List<Position> longestMatchToRight(Position pos){
         return pos.walkRight()
-                .takeWhile(position -> speelbord.getCellAt(pos).equals(speelbord.getCellAt(position)))
+                .filter(position -> speelbord.getCellAt(position) != null)
+                .takeWhile(position -> speelbord.getCellAt(position).equals(speelbord.getCellAt(pos)))
                 .toList();
     }
     public List<Position> longestMatchDown(Position pos){
         return pos.walkDown()
-                .takeWhile(position -> speelbord.getCellAt(pos).equals(speelbord.getCellAt(position)))
+                .filter(position -> speelbord.getCellAt(position) != null)
+                .takeWhile(position -> speelbord.getCellAt(position).equals(speelbord.getCellAt(pos)))
                 .toList();
     }
 
-    public Board<Candy> getSpeelbord() {
-        return speelbord;
-    }
+
     public void clearMatch(List<Position> match){
         if (match.isEmpty()) return;
 
@@ -77,12 +82,26 @@ public class BoardMaxScore {
             }
 
             if (speelbord.getCellAt(nextPosition) != null){
-                speelbord.replaceCellAt(pos, speelbord.getCellAt(nextPosition));
+                speelbord.board.put(pos, speelbord.getCellAt(nextPosition));
                 speelbord.board.remove(nextPosition);
             }
         }
 
         var nextPos = new Position(pos.rowNr()-1, pos.columNr(), pos.boardSize());
         fallDownTo(nextPos);
+    }
+    public boolean updateBoard(){
+        var matches = findAllMatches();
+        if (matches.isEmpty()) return false;
+
+        for (var match: matches){
+            clearMatch(match);
+        }
+        for (int col = 0; col < speelbord.boardSize.colum(); col++){
+            fallDownTo(new Position(speelbord.boardSize.row()-1, col,speelbord.boardSize));
+        }
+        updateBoard();
+        return true;
+
     }
 }
