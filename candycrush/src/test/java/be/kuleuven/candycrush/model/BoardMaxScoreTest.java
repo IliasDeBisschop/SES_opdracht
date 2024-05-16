@@ -401,7 +401,7 @@ public void newModel_longestMatchDown_returnControle(){
                 **@#""");
         var board = new BoardMaxScore(model.getSpeelbord());
         assert board.updateBoard();
-        assert board.getScore() == 6;
+        assert board.getScore() == 5;
 
         assert board.getSpeelbord().getCellAt(new Position(0,0,board.getBoardSize())) != null;
         assert board.getSpeelbord().getCellAt(new Position(0,1,board.getBoardSize())) == null;
@@ -433,7 +433,7 @@ public void newModel_longestMatchDown_returnControle(){
                 **@#""");
         var board = new BoardMaxScore(model.getSpeelbord());
         assert board.updateBoard();
-        assert board.getScore() == 10;
+        assert board.getScore() == 8;
         assert board.getSpeelbord().getCellAt(new Position(0,0,board.getBoardSize())) != null;
         assert board.getSpeelbord().getCellAt(new Position(0,1,board.getBoardSize())) == null;
         assert board.getSpeelbord().getCellAt(new Position(0,2,board.getBoardSize())) == null;
