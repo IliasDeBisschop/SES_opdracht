@@ -10,6 +10,13 @@ import java.util.HashSet;
 import static be.kuleuven.candycrush.model.CandycrushModel.createBoardFromString;
 
 public class BoardMaxScoreTest {
+    //hulpfunctie
+    public void printSolution(BoardMaxScore.Solution solution){
+        System.out.println("score: "+ solution.score());
+        System.out.println("solution size: "+ solution.switches().size());
+
+        solution.switches().forEach(System.out::println);
+    }
     //firstTwoHaveCandy
     @Test
     public void lijstMet2NormalCandy2_controleOpNormalCandy2_firstTwoHaveCandy_returnTrue(){
@@ -346,6 +353,7 @@ public void newModel_longestMatchDown_returnControle(){
         assert !board.getSpeelbord().board.containsKey(new Position(1,3,board.getBoardSize()));
         assert !board.getSpeelbord().board.containsKey(new Position(1,3,board.getBoardSize()));
     }
+
 //    clearMatch
 
 //    fallDownTo
@@ -393,6 +401,7 @@ public void newModel_longestMatchDown_returnControle(){
                 **@#""");
         var board = new BoardMaxScore(model.getSpeelbord());
         assert board.updateBoard();
+        assert board.getScore() == 6;
 
         assert board.getSpeelbord().getCellAt(new Position(0,0,board.getBoardSize())) != null;
         assert board.getSpeelbord().getCellAt(new Position(0,1,board.getBoardSize())) == null;
@@ -424,7 +433,7 @@ public void newModel_longestMatchDown_returnControle(){
                 **@#""");
         var board = new BoardMaxScore(model.getSpeelbord());
         assert board.updateBoard();
-
+        assert board.getScore() == 10;
         assert board.getSpeelbord().getCellAt(new Position(0,0,board.getBoardSize())) != null;
         assert board.getSpeelbord().getCellAt(new Position(0,1,board.getBoardSize())) == null;
         assert board.getSpeelbord().getCellAt(new Position(0,2,board.getBoardSize())) == null;
@@ -456,4 +465,127 @@ public void newModel_longestMatchDown_returnControle(){
         var board = new BoardMaxScore(model.getSpeelbord());
         assert !board.updateBoard();
         }
+
+    @Test
+    public void newModel_updateBoardMetL_returnScore5(){
+        CandycrushModel model = createBoardFromString("""
+                ***
+                @#*
+                o@*
+                *o@""");
+        var board = new BoardMaxScore(model.getSpeelbord());
+        board.updateBoard();
+        assert board.getScore() == 5;
+    }
+//    updateBoard
+
+//    maximizeScore
+    @Test
+    public void newModel_maxScore_returnControle(){
+        CandycrushModel model1 = createBoardFromString("""
+                               @@o#
+                               o*#o
+                               @@**
+                               *#@@""");
+        var board = new BoardMaxScore(model1.getSpeelbord());
+        var solution = board.maximizeScore();
+        printSolution(solution);
+
+        var controle = new ArrayList<ArrayList<Position>>();
+
+        var temp = new ArrayList<Position>();
+        temp.add(new Position(2,1,board.getBoardSize()));
+        temp.add(new Position(3,1,board.getBoardSize()));
+        controle.add(temp);
+
+        temp = new ArrayList<>();
+        temp.add(new Position(1,0,board.getBoardSize()));
+        temp.add(new Position(1,1,board.getBoardSize()));
+        controle.add(temp);
+
+        temp = new ArrayList<>();
+        temp.add(new Position(1,3,board.getBoardSize()));
+        temp.add(new Position(2,3,board.getBoardSize()));
+        controle.add(temp);
+
+        temp = new ArrayList<>();
+        temp.add(new Position(2,1,board.getBoardSize()));
+        temp.add(new Position(3,1,board.getBoardSize()));
+        controle.add(temp);
+
+        assert solution.score() == 16;
+        assert solution.switches().equals(controle);
+    }
+    @Test
+    public void newModel2_maxScore_returnControle(){
+        CandycrushModel model2 = createBoardFromString("""
+                                   #oo##
+                                   #@o@@
+                                   *##o@
+                                   @@*@o
+                                   **#*o""");
+        var board = new BoardMaxScore(model2.getSpeelbord());
+        var solution = board.maximizeScore();
+        printSolution(solution);
+
+        var controle = new ArrayList<ArrayList<Position>>();
+
+        var temp = new ArrayList<Position>();
+        temp.add(new Position(2,0,board.getBoardSize()));
+        temp.add(new Position(2,1,board.getBoardSize()));
+        controle.add(temp);
+
+        temp = new ArrayList<>();
+        temp.add(new Position(3,3,board.getBoardSize()));
+        temp.add(new Position(3,4,board.getBoardSize()));
+        controle.add(temp);
+
+        temp = new ArrayList<>();
+        temp.add(new Position(1,2,board.getBoardSize()));
+        temp.add(new Position(1,3,board.getBoardSize()));
+        controle.add(temp);
+
+        temp = new ArrayList<>();
+        temp.add(new Position(2,2,board.getBoardSize()));
+        temp.add(new Position(3,2,board.getBoardSize()));
+        controle.add(temp);
+
+        temp = new ArrayList<>();
+        temp.add(new Position(2,1,board.getBoardSize()));
+        temp.add(new Position(2,2,board.getBoardSize()));
+        controle.add(temp);
+
+        temp = new ArrayList<>();
+        temp.add(new Position(4,2,board.getBoardSize()));
+        temp.add(new Position(4,3,board.getBoardSize()));
+        controle.add(temp);
+
+        temp = new ArrayList<>();
+        temp.add(new Position(4,3,board.getBoardSize()));
+        temp.add(new Position(4,4,board.getBoardSize()));
+        controle.add(temp);
+
+        assert solution.score() == 23;
+        assert solution.switches().equals(controle);
+    }
+    @Test
+    public void newModel3_maxScore_returnControle(){
+        CandycrushModel model3 = createBoardFromString("""
+                                   #@#oo@
+                                   @**@**
+                                   o##@#o
+                                   @#oo#@
+                                   @*@**@
+                                   *#@##*""");
+        var board = new BoardMaxScore(model3.getSpeelbord());
+        var solution = board.maximizeScore();
+        printSolution(solution);
+
+        assert solution.switches().size() == 9;
+        assert solution.score() == 33;
+    }
+
+
 }
+
+
